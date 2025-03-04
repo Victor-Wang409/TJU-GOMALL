@@ -17,6 +17,7 @@ package model
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -46,6 +47,7 @@ func AddCart(db *gorm.DB, ctx context.Context, c *Cart) error {
 	if find.ID > 0 {
 		err = db.WithContext(ctx).Model(&Cart{}).Where(&Cart{UserId: c.UserId, ProductId: c.ProductId}).UpdateColumn("qty", gorm.Expr("qty+?", c.Qty)).Error
 	} else {
+		fmt.Println("create cart!")
 		err = db.WithContext(ctx).Model(&Cart{}).Create(c).Error
 	}
 	return err

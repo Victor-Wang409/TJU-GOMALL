@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/cart/biz/service"
 	cart "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart"
@@ -14,20 +13,17 @@ type CartServiceImpl struct{}
 // AddItem implements the CartServiceImpl interface.
 func (s *CartServiceImpl) AddItem(ctx context.Context, req *cart.AddItemReq) (resp *cart.AddItemResp, err error) {
 	resp, err = service.NewAddItemService(ctx).Run(req)
-	fmt.Println("Add Cart!")
 	return resp, err
 }
 
 // GetCart implements the CartServiceImpl interface.
 func (s *CartServiceImpl) GetCart(ctx context.Context, req *cart.GetCartReq) (resp *cart.GetCartResp, err error) {
 	resp, err = service.NewGetCartService(ctx).Run(req)
-	fmt.Println("Get Cart!")
 	return resp, err
 }
 
 // EmptyCart implements the CartServiceImpl interface.
 func (s *CartServiceImpl) EmptyCart(ctx context.Context, req *cart.EmptyCartReq) (resp *cart.EmptyCartResp, err error) {
 	resp, err = service.NewEmptyCartService(ctx).Run(req)
-	fmt.Println("Empty Cart!")
 	return resp, err
 }

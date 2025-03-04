@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/cart/biz/dal/mysql"
 	"github.com/cloudwego/biz-demo/gomall/app/cart/biz/model"
@@ -24,6 +23,5 @@ func (s *EmptyCartService) Run(req *cart.EmptyCartReq) (resp *cart.EmptyCartResp
 	if err != nil {
 		return nil, kerrors.NewBizStatusError(50001, err.Error())
 	}
-	fmt.Println("Empty Cart!")
 	return &cart.EmptyCartResp{}, nil
 }
