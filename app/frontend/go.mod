@@ -96,3 +96,5 @@ require (
 )
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
+
+replace github.com/cloudwego/biz-demo/gomall/rpc_gen => /Users/skywingsir/GolandProjects/gomall/rpc_gen

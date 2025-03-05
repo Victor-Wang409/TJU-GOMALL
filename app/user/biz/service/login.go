@@ -3,9 +3,12 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/dal/mysql"
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/model"
+	"github.com/cloudwego/biz-demo/gomall/app/user/infra/rpc"
+	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/auth"
 	user "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/user"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,8 +37,19 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResq, err error)
 		return nil, err
 	}
 
+	// New Code
+	deliveryResp, err := rpc.AuthClient.DeliverTokenByRPC(s.ctx, &auth.DeliverTokenReq{
+		UserId: int32(row.ID),
+	})
+	if err != nil {
+		fmt.Println("DeliverTokenByRPC error:", err)
+		return nil, err
+	}
+	// fmt.Println("DeliverTokenByRPC response:", deliveryResp)
+
 	resp = &user.LoginResq{
 		UserId: int32(row.ID),
+		Token:  deliveryResp.Token,
 	}
 
 	return resp, nil

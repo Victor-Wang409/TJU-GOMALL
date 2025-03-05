@@ -13,7 +13,6 @@ gen-cart:
 	@cd rpc_gen && cwgo client --type RPC --service cart --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/cart.proto
 	@cd app/cart && cwgo server --type RPC --service cart --module github.com/cloudwego/biz-demo/gomall/app/cart --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/cart.proto
 
-
 .PHONY: gen-payment
 gen-payment:
 	@cd rpc_gen && cwgo client --type RPC --service payment --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/payment.proto
@@ -28,3 +27,8 @@ gen-checkout:
 gen-order:
 	@cd rpc_gen && cwgo client --type RPC --service order --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/order.proto
 	@cd app/order && cwgo server --type RPC --service order --module github.com/cloudwego/biz-demo/gomall/app/order --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/order.proto
+
+.PHONY: gen-auth
+gen-auth:
+	@cd rpc_gen && cwgo client --type RPC --service auth --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/auth.proto
+	@cd app/auth && cwgo server --type RPC --service auth --module github.com/cloudwego/biz-demo/gomall/app/auth --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/auth.proto

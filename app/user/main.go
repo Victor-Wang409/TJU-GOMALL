@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/dal"
 	"github.com/cloudwego/biz-demo/gomall/app/user/conf"
+	"github.com/cloudwego/biz-demo/gomall/app/user/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -23,6 +24,7 @@ func main() {
 		klog.Error(err.Error())
 	}
 	dal.Init()
+	rpc.Init()
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
