@@ -25,7 +25,11 @@ func (h *GetProductService) Run(req *product.ProductReq) (resp map[string]any, e
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println("Item:", p.Product)
+	// s := sessions.Default(h.RequestContext)
+	// token := s.Get("token")
+
+	// fmt.Println("Token:", token)
+
 	return utils.H{
 		"Item": p.Product,
 	}, nil
