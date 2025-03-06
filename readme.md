@@ -1,4 +1,4 @@
-# *** Project
+# Project
 
 ## introduce
 
@@ -24,6 +24,5 @@
 ## How to run
 
 ```shell
-sh build.sh
-sh output/bootstrap.sh
+sh run.sh
 ```
