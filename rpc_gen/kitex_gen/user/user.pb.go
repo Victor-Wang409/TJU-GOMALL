@@ -82,7 +82,7 @@ type LoginResq struct {
 	unknownFields protoimpl.UnknownFields
 
 	UserId int32 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	Token string
 }
 
 func (x *LoginResq) Reset() {

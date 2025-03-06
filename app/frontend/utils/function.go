@@ -9,3 +9,11 @@ func GetUserIdFromCtx(ctx context.Context) int32 {
 	}
 	return userId.(int32)
 }
+
+func GetTokenFromCtx(ctx context.Context) string {
+	token := ctx.Value(SessionToken)
+	if token == nil {
+		return ""
+	}
+	return token.(string)
+}

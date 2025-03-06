@@ -36,6 +36,8 @@ func (h *LoginService) Run(req *auth.LoginReq) (redrect string, err error) {
 	session := sessions.Default(h.RequestContext)
 	session.Set("user_id", resq.UserId)
 	session.Set("token", resq.Token) // New Code
+	// fmt.Println("Token:", resq.Token)
+
 	err = session.Save()
 	if err != nil {
 		return "", err

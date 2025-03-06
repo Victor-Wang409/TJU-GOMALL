@@ -45,12 +45,14 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResq, err error)
 		fmt.Println("DeliverTokenByRPC error:", err)
 		return nil, err
 	}
-	// fmt.Println("DeliverTokenByRPC response:", deliveryResp)
+	// fmt.Println("DeliverTokenByRPC response:", deliveryResp.Token)
 
 	resp = &user.LoginResq{
 		UserId: int32(row.ID),
-		Token:  deliveryResp.Token,
+		Token:  string(deliveryResp.Token),
 	}
+
+	// fmt.Println("response:", resp.Token)
 
 	return resp, nil
 }
