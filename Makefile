@@ -32,3 +32,8 @@ gen-order:
 gen-auth:
 	@cd rpc_gen && cwgo client --type RPC --service auth --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/auth.proto
 	@cd app/auth && cwgo server --type RPC --service auth --module github.com/cloudwego/biz-demo/gomall/app/auth --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/auth.proto
+
+.PHONY: gen-email
+gen-email:
+	@cd rpc_gen && cwgo client --type RPC --service email --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/email.proto
+	@cd app/email && cwgo server --type RPC --service email --module github.com/cloudwego/biz-demo/gomall/app/email --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/email.proto

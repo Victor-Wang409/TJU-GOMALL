@@ -5,14 +5,18 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/mq"
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart"
 	checkout "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/checkout"
+	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/email"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/payment"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/nats-io/nats.go"
+	"google.golang.org/protobuf/proto"
 )
 
 type CheckoutService struct {
@@ -103,6 +107,20 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		fmt.Println("Payment ERROR!", payReq)
 		return nil, err
 	}
+
+	data, _ := proto.Marshal(&email.EmailReq{
+		From:        "example@qq.com",
+		To:          req.Email,
+		ContentType: "text/plain",
+		Subject:     "Order Confirmation",
+		Content:     "Order Confirmation",
+		// Content:     fmt.Sprintf("Your order %s has been placed successfully!", orderId),
+	})
+	msg := nats.Msg{
+		Subject: "email",
+		Data:    data,
+	}
+	_ = mq.Nc.PublishMsg(&msg)
 
 	klog.Info(paymentResult)
 
