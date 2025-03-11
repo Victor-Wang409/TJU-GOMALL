@@ -7,19 +7,25 @@ import (
 	"github.com/cloudwego/biz-demo/gomall/app/cart/biz/dal"
 	"github.com/cloudwego/biz-demo/gomall/app/cart/conf"
 	"github.com/cloudwego/biz-demo/gomall/app/cart/infra/rpc"
+	"github.com/cloudwego/biz-demo/gomall/common/mtl"
+	"github.com/cloudwego/biz-demo/gomall/common/serversuite"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	consul "github.com/kitex-contrib/registry-consul"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var (
+	ServiceName   = conf.GetConf().Kitex.Service
+	RegistryAdder = conf.GetConf().Registry.RegistryAddress[0]
+)
+
 func main() {
 	_ = godotenv.Load()
+	mtl.InitMetric(ServiceName, conf.GetConf().Kitex.MetricsPort, RegistryAdder)
 	dal.Init()
 	rpc.Init()
 	opts := kitexInit()
@@ -39,18 +45,22 @@ func kitexInit() (opts []server.Option) {
 		panic(err)
 	}
 
-	opts = append(opts, server.WithServiceAddr(addr))
-
-	// service info
-	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-		ServiceName: conf.GetConf().Kitex.Service,
+	// opts = append(opts, server.WithServiceAddr(addr))
+	opts = append(opts, server.WithServiceAddr(addr), server.WithSuite(serversuite.CommonServerSuite{
+		CurrentServiceName: ServiceName,
+		RegistryAddr:       RegistryAdder,
 	}))
 
-	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		klog.Fatal(err)
-	}
-	opts = append(opts, server.WithRegistry(r))
+	// service info
+	// opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
+	// 	ServiceName: conf.GetConf().Kitex.Service,
+	// }))
+
+	// r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	// if err != nil {
+	// 	klog.Fatal(err)
+	// }
+	// opts = append(opts, server.WithRegistry(r))
 
 	// klog
 	logger := kitexlogrus.NewLogger()

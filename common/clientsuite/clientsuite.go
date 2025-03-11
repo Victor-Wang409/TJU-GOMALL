@@ -1,10 +1,13 @@
 package clientsuite
 
 import (
+	"github.com/cloudwego/biz-demo/gomall/app/cart/conf"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/transmeta"
 	"github.com/cloudwego/kitex/transport"
+	consul "github.com/kitex-contrib/registry-consul"
 )
 
 type CommonGrpcClientSuite struct {
@@ -20,6 +23,12 @@ func (s CommonGrpcClientSuite) Options() []client.Option {
 		client.WithMetaHandler(transmeta.ClientHTTP2Handler),
 		client.WithTransportProtocol(transport.GRPC),
 	}
+
+	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		hlog.Fatal(err)
+	}
+	opts = append(opts, client.WithResolver(r))
 
 	return opts
 }

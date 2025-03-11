@@ -2,10 +2,12 @@ package serversuite
 
 import (
 	"github.com/cloudwego/biz-demo/gomall/common/mtl"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/transmeta"
 	"github.com/cloudwego/kitex/server"
 	prometheus "github.com/kitex-contrib/monitor-prometheus"
+	consul "github.com/kitex-contrib/registry-consul"
 )
 
 type CommonServerSuite struct {
@@ -21,6 +23,13 @@ func (s CommonServerSuite) Options() []server.Option {
 		}),
 		server.WithTracer(prometheus.NewServerTracer("", "", prometheus.WithDisableServer(true), prometheus.WithRegistry(mtl.Registry))),
 	}
+
+	// r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	r, err := consul.NewConsulRegister(s.RegistryAddr)
+	if err != nil {
+		klog.Fatal(err)
+	}
+	opts = append(opts, server.WithRegistry(r))
 
 	return opts
 }
